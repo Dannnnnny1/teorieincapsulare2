@@ -1,0 +1,4 @@
+1,Amintiri din Copilarie,Ion Creanga,true
+2,Moby Dick,Herman Melville,false
+3,weeeww,rrtrdf,true
+1,Pistruitatul,dan,true

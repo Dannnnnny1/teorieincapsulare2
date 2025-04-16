@@ -1,0 +1,4 @@
+1,daniel,21,masculin,parola
+2,clara,18,feminin,parola
+3,ionel,10,masculin,parola
+5,ionut,20,masculin,parola2003

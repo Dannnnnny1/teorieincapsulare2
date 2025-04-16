@@ -17,13 +17,24 @@ import java.util.Scanner;
 
 public class ViewStudent {
 
-     public BookService bookService= new BookService();
-     public RentalService rentalService= new RentalService();
-     public CursService cursService=new CursService();
-     public EnrolmentService enrolmentService=new EnrolmentService();
-     public Scanner scanner= new Scanner(System.in);
-     public ViewLogin viewLogin=new ViewLogin();
-     public StudentService studentService=new StudentService();
+     private BookService bookService;
+     private RentalService rentalService;
+     private CursService cursService;
+     private EnrolmentService enrolmentService;
+     public Scanner scanner;
+     private ViewLogin viewLogin;
+     public StudentService studentService;
+
+     public ViewStudent(){
+         this.bookService=new BookService();
+         this.rentalService=new RentalService();
+         this.cursService=new CursService();
+         this.enrolmentService=new EnrolmentService();
+         this.scanner=new Scanner(System.in);
+         this.studentService=new StudentService();
+         this.viewLogin=new ViewLogin();
+         this.play();
+     }
 
 
      public Student student=null;
@@ -38,10 +49,6 @@ public class ViewStudent {
         System.out.println("6->Arata istoricul inscrierilor la cursuri");
         System.out.println("7->Arata cel mai popular curs");
 
-        //statisitca
-
-        //cursul cel mai frecventat
-
 
     }
 
@@ -50,16 +57,7 @@ public class ViewStudent {
         System.out.println("0->EXIT");
     }
     public void play(){
-        Scanner scanner=new Scanner(System.in);
-
-        bookService.load();
-        rentalService.load();
-        cursService.load();
-        enrolmentService.load();
-        viewLogin.studentService1.load();
-
         boolean run=true;
-
         while(run) {
             if (student == null) {
                 this.meniuLogin();
@@ -75,8 +73,6 @@ public class ViewStudent {
                 }
 
             } else {
-
-
                 this.meniuStudent();
                 int alegere=scanner.nextInt();
 
@@ -105,8 +101,6 @@ public class ViewStudent {
             }
         }
 
-
-
     }
 
 
@@ -118,14 +112,14 @@ public class ViewStudent {
         System.out.println("Ce carte doriti sa inchiriati?");
         String carte=scanner.nextLine();
         Book book= bookService.getBookByTitle(carte);
-        if(book!=null&&!book.inchiriat){
+        if(book!=null&&!book.isInchiriat()){
             Rental rental = new Rental();
             rental.id=this.rentalService.generareId();
-            rental.idStud=this.student.id;
-            rental.idBook=book.id;
+            rental.idStud= this.student.getId();
+            rental.idBook= book.getId();
             this.rentalService.addRent(rental);
             System.out.println("Cartea a fost inchiriata cu succes");
-            book.inchiriat=true;
+            book.setInchiriat(true);
             rental.stare="Inchiriata";
         }
         else {
@@ -136,7 +130,7 @@ public class ViewStudent {
     }
     public void rentalHistory(){
 
-        List<Integer>idInchiriate=rentalService.rentalHistory(student.id);
+        List<Integer>idInchiriate=rentalService.rentalHistory(student.getId());
         List<Book>carti=bookService.bookHistory(idInchiriate);
         for(int i=0;i<carti.size();i++){
             System.out.println(carti.get(i).descriere());
@@ -148,8 +142,8 @@ public class ViewStudent {
         String titlu=scanner.nextLine();
         Book carte=bookService.bookReturnal(titlu);
         if(carte!=null){
-            System.out.println("Cartea"+carte.title+" a fost returnata cu succes");
-            carte.inchiriat=false;
+            System.out.println("Cartea"+ carte.getTitle() +" a fost returnata cu succes");
+            carte.setInchiriat(false);
         }
         else{
             System.out.println("Aceasta carte nu este inchiriata");
@@ -163,8 +157,8 @@ public class ViewStudent {
         Curs curs1=cursService.getCursByName(curs);
         if(curs1!=null){
             Enrolment enrolment=new Enrolment();
-            enrolment.id=this.enrolmentService.generareIdEnrolment();
-            enrolment.id=this.student.id;
+            enrolment.setId(this.enrolmentService.generareIdEnrolment());
+            enrolment.setId(this.student.getId());
             this.enrolmentService.addEnrolment(enrolment);
             System.out.println("V-ati inscris cu succes la cursul de "+curs);
         }
@@ -174,12 +168,12 @@ public class ViewStudent {
 
     }
     public void istoriculCursurilor(){
-        List<Integer>idCursuri=enrolmentService.enrolmentHistory(student.id);
+        List<Integer>idCursuri=enrolmentService.enrolmentHistory(student.getId());
         List<Curs>cursuri=cursService.cursHistory(idCursuri);
         if(cursuri.size()>0){
             System.out.println("Pana acum v-ati inscris la urmatoarele cursuri:");
             for(int i=0;i<cursuri.size();i++){
-                System.out.println(cursuri.get(i).numeCurs);
+                System.out.println(cursuri.get(i).getNumeCurs());
             }
         }
         else{
@@ -192,7 +186,7 @@ public class ViewStudent {
         int id=frecventa.idCurs;
         Curs curs=cursService.getCursById(id);
         System.out.println("Cel mai frecventat curs este: ");
-        System.out.println(curs.numeCurs);
+        System.out.println(curs.getNumeCurs());
     }
 
 }

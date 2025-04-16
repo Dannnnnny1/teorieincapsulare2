@@ -2,9 +2,7 @@ package app.view;
 
 import app.students.StudentService;
 import app.students.Student;
-
 import java.util.Scanner;
-
 public class ViewLogin {
     //todo: logarea studentului
     public StudentService studentService1 = new StudentService();
@@ -21,7 +19,7 @@ public class ViewLogin {
 
         if (student!=null) {
             System.out.println("Autentificare cu succes!");
-            System.out.println("Bun venit "+ student.nume);
+            System.out.println("Bun venit "+ student.getNume());
             return student;
         } else {
             System.out.println("Autentificare esuata!");
